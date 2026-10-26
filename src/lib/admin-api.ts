@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/my-supabase";
 import type { Database } from "@/integrations/supabase/types";
 
 export type SiteSettings = Database["public"]["Tables"]["site_settings"]["Row"];

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ArrowRight, ExternalLink, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/my-supabase";
 import { adminProjectQuery, type Project } from "@/lib/admin-api";
 import { PROJECT_CATEGORIES } from "@/lib/categories";
 import { Button } from "@/components/ui/button";
