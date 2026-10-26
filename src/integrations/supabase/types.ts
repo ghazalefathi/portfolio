@@ -14,16 +14,291 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      project_images: {
+        Row: {
+          caption_en: string
+          caption_fa: string
+          created_at: string
+          id: string
+          kind: string
+          project_id: string
+          sort_order: number
+          url: string
+        }
+        Insert: {
+          caption_en?: string
+          caption_fa?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          project_id: string
+          sort_order?: number
+          url: string
+        }
+        Update: {
+          caption_en?: string
+          caption_fa?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          project_id?: string
+          sort_order?: number
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_images_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          category: string
+          cover_url: string
+          created_at: string
+          desc_en: string
+          desc_fa: string
+          features_en: string
+          features_fa: string
+          id: string
+          implementation_en: string
+          implementation_fa: string
+          link_url: string
+          published: boolean
+          sort_order: number
+          tag_en: string
+          tag_fa: string
+          tech: string
+          title_en: string
+          title_fa: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          cover_url?: string
+          created_at?: string
+          desc_en?: string
+          desc_fa?: string
+          features_en?: string
+          features_fa?: string
+          id?: string
+          implementation_en?: string
+          implementation_fa?: string
+          link_url?: string
+          published?: boolean
+          sort_order?: number
+          tag_en?: string
+          tag_fa?: string
+          tech?: string
+          title_en?: string
+          title_fa?: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          cover_url?: string
+          created_at?: string
+          desc_en?: string
+          desc_fa?: string
+          features_en?: string
+          features_fa?: string
+          id?: string
+          implementation_en?: string
+          implementation_fa?: string
+          link_url?: string
+          published?: boolean
+          sort_order?: number
+          tag_en?: string
+          tag_fa?: string
+          tech?: string
+          title_en?: string
+          title_fa?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          avatar_url: string
+          badge1_en: string
+          badge1_fa: string
+          badge2_en: string
+          badge2_fa: string
+          contact_subtitle_en: string
+          contact_subtitle_fa: string
+          contact_title_en: string
+          contact_title_fa: string
+          email: string
+          headline_en: string
+          headline_fa: string
+          id: number
+          name_en: string
+          name_fa: string
+          phone: string
+          role_en: string
+          role_fa: string
+          show_status: boolean
+          skills_design_title_en: string
+          skills_design_title_fa: string
+          skills_dev_title_en: string
+          skills_dev_title_fa: string
+          skills_subtitle_en: string
+          skills_subtitle_fa: string
+          skills_title_en: string
+          skills_title_fa: string
+          status_en: string
+          status_fa: string
+          subtext_en: string
+          subtext_fa: string
+          updated_at: string
+          works_subtitle_en: string
+          works_subtitle_fa: string
+          works_title_en: string
+          works_title_fa: string
+        }
+        Insert: {
+          avatar_url?: string
+          badge1_en?: string
+          badge1_fa?: string
+          badge2_en?: string
+          badge2_fa?: string
+          contact_subtitle_en?: string
+          contact_subtitle_fa?: string
+          contact_title_en?: string
+          contact_title_fa?: string
+          email?: string
+          headline_en?: string
+          headline_fa?: string
+          id?: number
+          name_en?: string
+          name_fa?: string
+          phone?: string
+          role_en?: string
+          role_fa?: string
+          show_status?: boolean
+          skills_design_title_en?: string
+          skills_design_title_fa?: string
+          skills_dev_title_en?: string
+          skills_dev_title_fa?: string
+          skills_subtitle_en?: string
+          skills_subtitle_fa?: string
+          skills_title_en?: string
+          skills_title_fa?: string
+          status_en?: string
+          status_fa?: string
+          subtext_en?: string
+          subtext_fa?: string
+          updated_at?: string
+          works_subtitle_en?: string
+          works_subtitle_fa?: string
+          works_title_en?: string
+          works_title_fa?: string
+        }
+        Update: {
+          avatar_url?: string
+          badge1_en?: string
+          badge1_fa?: string
+          badge2_en?: string
+          badge2_fa?: string
+          contact_subtitle_en?: string
+          contact_subtitle_fa?: string
+          contact_title_en?: string
+          contact_title_fa?: string
+          email?: string
+          headline_en?: string
+          headline_fa?: string
+          id?: number
+          name_en?: string
+          name_fa?: string
+          phone?: string
+          role_en?: string
+          role_fa?: string
+          show_status?: boolean
+          skills_design_title_en?: string
+          skills_design_title_fa?: string
+          skills_dev_title_en?: string
+          skills_dev_title_fa?: string
+          skills_subtitle_en?: string
+          skills_subtitle_fa?: string
+          skills_title_en?: string
+          skills_title_fa?: string
+          status_en?: string
+          status_fa?: string
+          subtext_en?: string
+          subtext_fa?: string
+          updated_at?: string
+          works_subtitle_en?: string
+          works_subtitle_fa?: string
+          works_title_en?: string
+          works_title_fa?: string
+        }
+        Relationships: []
+      }
+      skills: {
+        Row: {
+          created_at: string
+          group_key: string
+          id: string
+          label_en: string
+          label_fa: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          group_key?: string
+          id?: string
+          label_en?: string
+          label_fa?: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          group_key?: string
+          id?: string
+          label_en?: string
+          label_fa?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      admin_exists: { Args: never; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +425,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+    },
   },
 } as const
