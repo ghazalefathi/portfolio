@@ -2,11 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
+import { MY_SUPABASE_URL, MY_SUPABASE_KEY } from "@/lib/my-supabase";
 
 /** Read-only client for public portfolio content (RLS: published rows only). */
 function publicClient() {
-  const url = process.env["SUPABASE_URL"];
-  const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
+  const url = MY_SUPABASE_URL;
+  const key = MY_SUPABASE_KEY;
   if (!url || !key) throw new Error("Backend is not configured");
   return createClient<Database>(url, key, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },

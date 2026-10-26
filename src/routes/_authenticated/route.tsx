@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/my-supabase";
 
 // Session lives in browser storage, so the gate runs client-side only.
 export const Route = createFileRoute("/_authenticated")({

@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ArrowDown, ArrowUp, ImagePlus, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/my-supabase";
 import { swapItems, uploadImage, type ProjectImage } from "@/lib/admin-api";
 import { Button } from "@/components/ui/button";
 import { Section } from "./fields";

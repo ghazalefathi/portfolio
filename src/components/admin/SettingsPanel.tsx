@@ -3,7 +3,7 @@ import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/my-supabase";
 import { adminSettingsQuery, type SiteSettings } from "@/lib/admin-api";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";

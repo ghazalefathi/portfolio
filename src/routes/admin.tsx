@@ -3,7 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Lock, Loader2, MailCheck, ShieldCheck } from "lucide-react";
 
-import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/lib/my-supabase";
 import { adminExistsQuery } from "@/lib/portfolio-queries";
 import { Button } from "@/components/ui/button";
 
