@@ -29,15 +29,15 @@ export function AccountPanel() {
       { emailRedirectTo: `${window.location.origin}/dashboard` },
     );
     setEmailBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setNewEmail("");
     toast.success("لینک تأیید به ایمیل جدید ارسال شد. پس از تأیید، نام کاربری شما تغییر می‌کند.");
   }
 
   async function changePassword(e: React.FormEvent) {
     e.preventDefault();
-    if (password.length < 8) return toast.error("رمز جدید باید حداقل ۸ کاراکتر باشد");
-    if (password !== confirm) return toast.error("رمز جدید و تکرار آن یکسان نیستند");
+    if (password.length < 8) { toast.error("رمز جدید باید حداقل ۸ کاراکتر باشد"); return; }
+    if (password !== confirm) { toast.error("رمز جدید و تکرار آن یکسان نیستند"); return; }
     setPwBusy(true);
     // Verify the current password first
     const { error: verifyError } = await supabase.auth.signInWithPassword({
@@ -46,11 +46,11 @@ export function AccountPanel() {
     });
     if (verifyError) {
       setPwBusy(false);
-      return toast.error("رمز عبور فعلی اشتباه است");
+      { toast.error("رمز عبور فعلی اشتباه است"); return; }
     }
     const { error } = await supabase.auth.updateUser({ password, current_password: currentPassword });
     setPwBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setCurrentPassword("");
     setPassword("");
     setConfirm("");

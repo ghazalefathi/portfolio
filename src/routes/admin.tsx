@@ -77,8 +77,8 @@ function AdminLogin() {
   async function handleSetup(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (password.length < 8) return setError("رمز عبور باید حداقل ۸ کاراکتر باشد.");
-    if (password !== confirm) return setError("رمز عبور و تکرار آن یکسان نیستند.");
+    if (password.length < 8) { setError("رمز عبور باید حداقل ۸ کاراکتر باشد."); return; }
+    if (password !== confirm) { setError("رمز عبور و تکرار آن یکسان نیستند."); return; }
     setBusy(true);
     const { data: res, error: err } = await supabase.auth.signUp({
       email: email.trim(),
@@ -86,7 +86,7 @@ function AdminLogin() {
       options: { emailRedirectTo: `${window.location.origin}/admin` },
     });
     setBusy(false);
-    if (err) return setError(err.message);
+    if (err) { setError(err.message); return; }
     if (res.session) {
       navigate({ to: "/dashboard", replace: true });
       return;
@@ -103,7 +103,7 @@ function AdminLogin() {
       redirectTo: `${window.location.origin}/reset-password`,
     });
     setBusy(false);
-    if (err) return setError(err.message);
+    if (err) { setError(err.message); return; }
     setNotice("اگر این ایمیل ثبت شده باشد، لینک تغییر رمز برایتان ارسال شد.");
     setMode("login");
   }

@@ -39,7 +39,7 @@ export function SkillsPanel() {
       sort_order: maxOrder + 1,
     });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setFa("");
     setEn("");
     toast.success("مهارت اضافه شد");
@@ -48,7 +48,7 @@ export function SkillsPanel() {
 
   async function remove(s: Skill) {
     const { error } = await supabase.from("skills").delete().eq("id", s.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("مهارت حذف شد");
     refresh();
   }

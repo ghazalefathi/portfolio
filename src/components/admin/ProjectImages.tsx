@@ -59,7 +59,7 @@ export function ProjectImages({
   async function updateCaption(img: ProjectImage, field: "caption_fa" | "caption_en", value: string) {
     if (img[field] === value) return;
     const { error } = await supabase.from("project_images").update({ [field]: value }).eq("id", img.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("توضیح تصویر ذخیره شد");
     refresh();
   }
@@ -77,7 +77,7 @@ export function ProjectImages({
 
   async function remove(img: ProjectImage) {
     const { error } = await supabase.from("project_images").delete().eq("id", img.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("تصویر حذف شد");
     refresh();
   }

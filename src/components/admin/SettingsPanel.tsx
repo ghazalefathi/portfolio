@@ -45,7 +45,7 @@ export function SettingsPanel() {
     setSaving(true);
     const { error } = await supabase.from("site_settings").upsert({ id: 1, ...form });
     setSaving(false);
-    if (error) return toast.error(`ذخیره نشد: ${error.message}`);
+    if (error) { toast.error(`ذخیره نشد: ${error.message}`); return; }
     toast.success("اطلاعات سایت ذخیره شد");
     qc.invalidateQueries({ queryKey: ["admin", "settings"] });
     qc.invalidateQueries({ queryKey: ["portfolio"] });

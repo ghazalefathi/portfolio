@@ -31,7 +31,7 @@ export function ProjectsPanel() {
 
   async function togglePublished(p: Project, published: boolean) {
     const { error } = await supabase.from("projects").update({ published }).eq("id", p.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(published ? "پروژه در سایت نمایش داده می‌شود" : "پروژه از سایت مخفی شد");
     refresh();
   }
@@ -45,13 +45,13 @@ export function ProjectsPanel() {
       reordered.map((p, i) => supabase.from("projects").update({ sort_order: i + 1 }).eq("id", p.id)),
     );
     const failed = results.find((r) => r.error);
-    if (failed?.error) return toast.error(failed.error.message);
+    if (failed?.error) { toast.error(failed.error.message); return; }
     refresh();
   }
 
   async function remove(p: Project) {
     const { error } = await supabase.from("projects").delete().eq("id", p.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("پروژه حذف شد");
     refresh();
   }

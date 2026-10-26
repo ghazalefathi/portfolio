@@ -43,12 +43,12 @@ function ResetPassword() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (password.length < 8) return setError("رمز عبور باید حداقل ۸ کاراکتر باشد.");
-    if (password !== confirm) return setError("رمز عبور و تکرار آن یکسان نیستند.");
+    if (password.length < 8) { setError("رمز عبور باید حداقل ۸ کاراکتر باشد."); return; }
+    if (password !== confirm) { setError("رمز عبور و تکرار آن یکسان نیستند."); return; }
     setBusy(true);
     const { error: err } = await supabase.auth.updateUser({ password });
     setBusy(false);
-    if (err) return setError(err.message);
+    if (err) { setError(err.message); return; }
     toast.success("رمز عبور تغییر کرد");
     navigate({ to: "/dashboard", replace: true });
   }
