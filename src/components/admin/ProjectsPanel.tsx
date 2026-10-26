@@ -4,7 +4,7 @@ import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { adminProjectsQuery, type Project } from "@/lib/admin-api";
+import { adminProjectsQuery, swapItems, type Project } from "@/lib/admin-api";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -39,8 +39,7 @@ export function ProjectsPanel() {
   async function move(index: number, dir: -1 | 1) {
     const target = index + dir;
     if (target < 0 || target >= projects.length) return;
-    const reordered = [...projects];
-    [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
+    const reordered = swapItems(projects, index, target);
     const results = await Promise.all(
       reordered.map((p, i) => supabase.from("projects").update({ sort_order: i + 1 }).eq("id", p.id)),
     );

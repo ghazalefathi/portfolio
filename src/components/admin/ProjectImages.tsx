@@ -4,7 +4,7 @@ import { ArrowDown, ArrowUp, ImagePlus, Loader2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { uploadImage, type ProjectImage } from "@/lib/admin-api";
+import { swapItems, uploadImage, type ProjectImage } from "@/lib/admin-api";
 import { Button } from "@/components/ui/button";
 import { Section } from "./fields";
 
@@ -58,7 +58,8 @@ export function ProjectImages({
 
   async function updateCaption(img: ProjectImage, field: "caption_fa" | "caption_en", value: string) {
     if (img[field] === value) return;
-    const { error } = await supabase.from("project_images").update({ [field]: value }).eq("id", img.id);
+    const patch = field === "caption_fa" ? { caption_fa: value } : { caption_en: value };
+    const { error } = await supabase.from("project_images").update(patch).eq("id", img.id);
     if (error) { toast.error(error.message); return; }
     toast.success("توضیح تصویر ذخیره شد");
     refresh();
@@ -67,8 +68,7 @@ export function ProjectImages({
   async function move(index: number, dir: -1 | 1) {
     const target = index + dir;
     if (target < 0 || target >= items.length) return;
-    const reordered = [...items];
-    [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
+    const reordered = swapItems(items, index, target);
     await Promise.all(
       reordered.map((img, i) => supabase.from("project_images").update({ sort_order: i + 1 }).eq("id", img.id)),
     );

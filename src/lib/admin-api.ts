@@ -26,51 +26,68 @@ export async function uploadImage(file: File, folder: string): Promise<string> {
   return data.signedUrl;
 }
 
-function unwrap<T>(res: { data: T | null; error: { message: string } | null }): T {
-  if (res.error) throw new Error(res.error.message);
-  return res.data as T;
+/** Swap two items of an array (returns a new array). */
+export function swapItems<T>(list: T[], a: number, b: number): T[] {
+  const next = [...list];
+  const tmp = next[a] as T;
+  next[a] = next[b] as T;
+  next[b] = tmp;
+  return next;
 }
 
 export const adminSettingsQuery = () =>
   queryOptions({
     queryKey: ["admin", "settings"],
-    queryFn: async () =>
-      unwrap(await supabase.from("site_settings").select("*").eq("id", 1).maybeSingle()),
+    queryFn: async (): Promise<SiteSettings | null> => {
+      const { data, error } = await supabase.from("site_settings").select("*").eq("id", 1).maybeSingle();
+      if (error) throw new Error(error.message);
+      return data;
+    },
   });
 
 export const adminProjectsQuery = () =>
   queryOptions({
     queryKey: ["admin", "projects"],
-    queryFn: async () =>
-      unwrap(
-        await supabase.from("projects").select("*").order("sort_order").order("created_at"),
-      ) ?? [],
+    queryFn: async (): Promise<Project[]> => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .order("sort_order")
+        .order("created_at");
+      if (error) throw new Error(error.message);
+      return data ?? [];
+    },
   });
 
 export const adminProjectQuery = (id: string) =>
   queryOptions({
     queryKey: ["admin", "project", id],
-    queryFn: async () => {
-      const project = unwrap(await supabase.from("projects").select("*").eq("id", id).maybeSingle());
-      const images =
-        unwrap(
-          await supabase
-            .from("project_images")
-            .select("*")
-            .eq("project_id", id)
-            .order("sort_order")
-            .order("created_at"),
-        ) ?? [];
-      return { project, images };
+    queryFn: async (): Promise<{ project: Project | null; images: ProjectImage[] }> => {
+      const [project, images] = await Promise.all([
+        supabase.from("projects").select("*").eq("id", id).maybeSingle(),
+        supabase
+          .from("project_images")
+          .select("*")
+          .eq("project_id", id)
+          .order("sort_order")
+          .order("created_at"),
+      ]);
+      if (project.error) throw new Error(project.error.message);
+      if (images.error) throw new Error(images.error.message);
+      return { project: project.data, images: images.data ?? [] };
     },
   });
 
 export const adminSkillsQuery = () =>
   queryOptions({
     queryKey: ["admin", "skills"],
-    queryFn: async () =>
-      unwrap(await supabase.from("skills").select("*").order("sort_order").order("created_at")) ??
-      [],
+    queryFn: async (): Promise<Skill[]> => {
+      const { data, error } = await supabase
+        .from("skills")
+        .select("*")
+        .order("sort_order")
+        .order("created_at");
+      if (error) throw new Error(error.message);
+      return data ?? [];
+    },
   });
-
-export { unwrap };

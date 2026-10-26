@@ -11,9 +11,9 @@ export function Section({
   className,
 }: {
   title: string;
-  description?: string;
+  description?: string | undefined;
   children: React.ReactNode;
-  className?: string;
+  className?: string | undefined;
 }) {
   return (
     <section className={cn("tile space-y-5 rounded-3xl p-5 md:p-6", className)}>
@@ -40,12 +40,12 @@ export function TextField({
   label: string;
   value: string;
   onChange: (v: string) => void;
-  ltr?: boolean;
-  multiline?: boolean;
-  rows?: number;
-  placeholder?: string;
+  ltr?: boolean | undefined;
+  multiline?: boolean | undefined;
+  rows?: number | undefined;
+  placeholder?: string | undefined;
   type?: string;
-  required?: boolean;
+  required?: boolean | undefined;
 }) {
   return (
     <label className="block space-y-1">
@@ -91,9 +91,9 @@ export function BiField({
   en: string;
   onFa: (v: string) => void;
   onEn: (v: string) => void;
-  multiline?: boolean;
-  rows?: number;
-  required?: boolean;
+  multiline?: boolean | undefined;
+  rows?: number | undefined;
+  required?: boolean | undefined;
 }) {
   return (
     <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -114,7 +114,7 @@ export function ImageField({
   value: string;
   onChange: (url: string) => void;
   folder: string;
-  round?: boolean;
+  round?: boolean | undefined;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
