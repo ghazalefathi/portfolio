@@ -44,8 +44,12 @@ export const adminExistsQuery = () =>
   queryOptions({
     queryKey: ["admin-exists"],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("admin_exists");
-      if (error) throw new Error(error.message);
-      return { exists: Boolean(data) };
+      try {
+        const { data, error } = await supabase.rpc("admin_exists");
+        if (error) return { exists: true };
+        return { exists: Boolean(data) };
+      } catch {
+        return { exists: true };
+      }
     },
   });
