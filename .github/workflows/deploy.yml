@@ -39,7 +39,8 @@ jobs:
 
       - name: Prepare static files for GitHub Pages
         run: |
-          cp dist/index.html dist/404.html || cp dist/client/index.html dist/404.html
+          cp index.html dist/index.html
+          cp index.html dist/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
