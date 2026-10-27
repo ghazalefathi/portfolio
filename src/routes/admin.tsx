@@ -1,14 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Lock, Loader2, MailCheck, ShieldCheck } from "lucide-react";
 
 import { supabase } from "@/lib/my-supabase";
-import { adminExistsQuery } from "@/lib/portfolio-queries";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/admin")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(adminExistsQuery()),
   head: () => ({
     meta: [
       { title: "ورود مدیر | Ghazaleh Fathi Portfolio" },
@@ -26,9 +23,8 @@ export const Route = createFileRoute("/admin")({
 type Mode = "login" | "setup" | "forgot";
 
 function AdminLogin() {
-  const { data } = useSuspenseQuery(adminExistsQuery());
   const navigate = useNavigate();
-  const [mode, setMode] = useState<Mode>(data.exists ? "login" : "setup");
+  const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -40,10 +36,14 @@ function AdminLogin() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const { data: u } = await supabase.auth.getUser();
-      if (!u.user || cancelled) return;
-      const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: u.user.id, _role: "admin" });
-      if (isAdmin && !cancelled) navigate({ to: "/dashboard", replace: true });
+      try {
+        const { data: u } = await supabase.auth.getUser();
+        if (!u.user || cancelled) return;
+        const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: u.user.id, _role: "admin" });
+        if (isAdmin && !cancelled) navigate({ to: "/dashboard", replace: true });
+      } catch {
+        // ignore
+      }
     })();
     return () => {
       cancelled = true;
@@ -195,12 +195,10 @@ function AdminLogin() {
             <button type="button" onClick={() => setMode("forgot")} className="font-semibold text-info hover:underline">
               رمز عبور را فراموش کرده‌ام
             </button>
-          ) : data.exists ? (
+          ) : (
             <button type="button" onClick={() => setMode("login")} className="font-semibold text-info hover:underline">
               بازگشت به ورود
             </button>
-          ) : (
-            <span />
           )}
           <Link to="/" className="text-muted-foreground hover:text-foreground">
             مشاهده سایت ←
