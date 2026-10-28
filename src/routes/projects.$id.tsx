@@ -126,6 +126,12 @@ function ProjectDetail() {
             </div>
           )}
 
+          {p.video_url && (
+            <div className="space-y-2 overflow-hidden rounded-3xl border border-border bg-secondary p-2 shadow-sm">
+              <video src={p.video_url} controls className="w-full rounded-2xl shadow-md" />
+            </div>
+          )}
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
             <InfoTile icon="📱" iconClass="bg-code-soft" label={isFa ? "نوع پروژه" : "Project Type"}>
               {isFa ? cat.fa : cat.en}

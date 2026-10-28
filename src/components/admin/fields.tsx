@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
-import { ImagePlus, Loader2, X } from "lucide-react";
+import { ImagePlus, Loader2, Video, X } from "lucide-react";
 import { toast } from "sonner";
-import { uploadImage } from "@/lib/admin-api";
+import { uploadImage, uploadVideo } from "@/lib/admin-api";
 import { cn } from "@/lib/utils";
 
 export function Section({
@@ -180,6 +180,88 @@ export function ImageField({
           ref={inputRef}
           type="file"
           accept="image/*"
+          className="hidden"
+          onChange={(e) => handleFile(e.target.files?.[0])}
+        />
+      </div>
+    </div>
+  );
+}
+
+export function VideoField({
+  label,
+  value,
+  onChange,
+  folder,
+  required,
+}: {
+  label: string;
+  value: string;
+  onChange: (url: string) => void;
+  folder: string;
+  required?: boolean;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+
+  async function handleFile(file: File | undefined) {
+    if (!file) return;
+    setBusy(true);
+    try {
+      const url = await uploadVideo(file, folder);
+      onChange(url);
+      toast.success("ویدیو آپلود شد — برای ثبت نهایی «ذخیره» را بزنید");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "آپلود ویدیو ناموفق بود");
+    } finally {
+      setBusy(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  return (
+    <div className="space-y-2">
+      <span className="text-xs font-bold text-subtle-foreground">
+        {label} {required && <span className="text-destructive">*</span>}
+      </span>
+      <div className="flex items-center gap-4">
+        <div className="relative flex h-24 w-40 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border bg-secondary">
+          {value ? (
+            <video src={value} className="h-full w-full object-cover" />
+          ) : (
+            <Video className="h-5 w-5 text-subtle" />
+          )}
+          {busy && (
+            <div className="absolute inset-0 flex items-center justify-center bg-card/70">
+              <Loader2 className="h-5 w-5 animate-spin" />
+            </div>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            disabled={busy}
+            className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+          >
+            <Video className="h-3.5 w-3.5" />
+            {value ? "تغییر ویدیو" : "آپلود ویدیو"}
+          </button>
+          {value && (
+            <button
+              type="button"
+              onClick={() => onChange("")}
+              className="inline-flex items-center gap-1 rounded-full bg-destructive-soft px-3 py-2 text-xs font-bold text-destructive hover:bg-destructive hover:text-destructive-foreground"
+            >
+              <X className="h-3.5 w-3.5" />
+              حذف
+            </button>
+          )}
+        </div>
+        <input
+          ref={inputRef}
+          type="file"
+          accept="video/*"
           className="hidden"
           onChange={(e) => handleFile(e.target.files?.[0])}
         />

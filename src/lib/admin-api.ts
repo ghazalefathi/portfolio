@@ -26,6 +26,21 @@ export async function uploadImage(file: File, folder: string): Promise<string> {
   return data.signedUrl;
 }
 
+export async function uploadVideo(file: File, folder: string): Promise<string> {
+  if (!file.type.startsWith("video/")) throw new Error("فقط فایل ویدیویی قابل آپلود است");
+  const ext = (file.name.split(".").pop() || "mp4").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const path = `${folder}/${crypto.randomUUID()}.${ext || "mp4"}`;
+  const { error } = await supabase.storage
+    .from(BUCKET)
+    .upload(path, file, { contentType: file.type, upsert: false });
+  if (error) throw new Error(error.message);
+  const { data, error: signError } = await supabase.storage
+    .from(BUCKET)
+    .createSignedUrl(path, SIGNED_URL_SECONDS);
+  if (signError || !data) throw new Error(signError?.message ?? "Upload failed");
+  return data.signedUrl;
+}
+
 /** Swap two items of an array (returns a new array). */
 export function swapItems<T>(list: T[], a: number, b: number): T[] {
   const next = [...list];

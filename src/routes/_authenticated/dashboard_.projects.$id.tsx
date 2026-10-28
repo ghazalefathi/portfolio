@@ -10,7 +10,7 @@ import { PROJECT_CATEGORIES } from "@/lib/categories";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { BiField, ImageField, Section, TextField } from "@/components/admin/fields";
+import { BiField, ImageField, Section, TextField, VideoField } from "@/components/admin/fields";
 import { ProjectImages } from "@/components/admin/ProjectImages";
 
 export const Route = createFileRoute("/_authenticated/dashboard_/projects/$id")({
@@ -38,7 +38,7 @@ type Editable = Omit<Project, "id" | "created_at" | "updated_at" | "sort_order">
 const BLANK: Editable = {
   title_fa: "", title_en: "", desc_fa: "", desc_en: "", features_fa: "", features_en: "",
   implementation_fa: "", implementation_en: "", tag_fa: "", tag_en: "", tech: "Flutter & Dart",
-  category: "mobile", link_url: "", release_url: "", cover_url: "", published: true,
+  category: "mobile", link_url: "", release_url: "", video_url: "", cover_url: "", published: true,
 };
 
 function ProjectEditorPage() {
@@ -214,6 +214,10 @@ function ProjectForm({
 
       <Section title="🖼️ تصویر کاور" description="این عکس روی کارت پروژه در صفحه اصلی و بالای صفحه جزئیات نمایش داده می‌شود.">
         <ImageField label="کاور پروژه" value={form.cover_url} onChange={set("cover_url")} folder="covers" />
+      </Section>
+
+      <Section title="🎥 ویدیوی پروژه" description="ویدیو دموی معرفی اپلیکیشن (اختیاری)">
+        <VideoField label="ویدیو پروژه" value={(form as any).video_url || ""} onChange={set("video_url" as any)} folder="videos" />
       </Section>
 
       <Section title="📖 توضیحات صفحه جزئیات">
