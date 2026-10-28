@@ -217,7 +217,12 @@ function ProjectForm({
       </Section>
 
       <Section title="🎥 ویدیوی پروژه" description="ویدیو دموی معرفی اپلیکیشن (اختیاری)">
-        <VideoField label="ویدیو پروژه" value={(form as any).video_url || ""} onChange={set("video_url" as any)} folder="videos" />
+        <VideoField
+          label="ویدیو پروژه"
+          value={form.video_url}
+          onChange={set("video_url")}
+          folder="videos"
+        />
       </Section>
 
       <Section title="📖 توضیحات صفحه جزئیات">

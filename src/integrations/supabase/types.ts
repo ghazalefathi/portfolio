@@ -76,6 +76,7 @@ export type Database = {
           title_en: string
           title_fa: string
           updated_at: string
+          video_url: string
         }
         Insert: {
           category?: string
@@ -97,6 +98,7 @@ export type Database = {
           title_en?: string
           title_fa?: string
           updated_at?: string
+          video_url?: string
         }
         Update: {
           category?: string
@@ -118,6 +120,7 @@ export type Database = {
           title_en?: string
           title_fa?: string
           updated_at?: string
+          video_url?: string
         }
         Relationships: []
       }
