@@ -121,8 +121,8 @@ function ProjectDetail() {
           </div>
 
           {p.cover_url && (
-            <div className="relative h-72 w-full overflow-hidden rounded-3xl border border-border bg-secondary shadow-sm md:h-[420px]">
-              <img src={p.cover_url} alt={title} className="h-full w-full object-cover" />
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-border bg-secondary shadow-sm">
+              <img src={p.cover_url} alt={title} className="h-full w-full object-contain bg-secondary" />
             </div>
           )}
 
