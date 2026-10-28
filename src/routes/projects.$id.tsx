@@ -73,26 +73,26 @@ function ProjectDetail() {
     <div className="flex min-h-screen justify-center p-4 pb-20 md:p-8">
       <div className="w-full max-w-5xl space-y-6">
         <header className="glass-bar sticky top-4 z-50 flex items-center justify-between rounded-full px-4 py-3 md:px-5">
-          <div className="flex items-center gap-3">
-            <Link to="/" className="group flex items-center gap-2.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-primary transition-transform group-hover:scale-125" />
-              <span className="text-xs font-bold text-foreground transition-colors group-hover:text-info md:text-sm">
-                {t(data.owner.name_fa, data.owner.name_en)}
-              </span>
-            </Link>
-            <span className="hidden text-border sm:inline">|</span>
-            <span className="hidden rounded-full bg-secondary px-3 py-1 text-[11px] font-semibold text-subtle-foreground sm:inline-block">
-              {isFa ? "جزئیات پروژه" : "Project Detail"}
-            </span>
-          </div>
           <div className="flex items-center gap-2">
             <Link
               to="/"
               hash="works"
               className="group flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground shadow-sm transition-all hover:bg-primary/90"
             >
+              <ArrowLeft className="h-3.5 w-3.5 rotate-180 sm:rotate-0" />
               <span className="hidden sm:inline">{isFa ? "بازگشت به نمونه‌کارها" : "Back to Works"}</span>
-              <ArrowLeft className="h-3.5 w-3.5 ltr:rotate-180" />
+            </Link>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="hidden rounded-full bg-secondary px-3 py-1 text-[11px] font-semibold text-subtle-foreground sm:inline-block">
+              {isFa ? "جزئیات پروژه" : "Project Detail"}
+            </span>
+            <span className="hidden text-border sm:inline">|</span>
+            <Link to="/" className="group flex items-center gap-2.5">
+              <span className="text-xs font-bold text-foreground transition-colors group-hover:text-info md:text-sm">
+                {t(data.owner.name_fa, data.owner.name_en)}
+              </span>
+              <span className="h-2.5 w-2.5 rounded-full bg-primary transition-transform group-hover:scale-125" />
             </Link>
           </div>
         </header>
