@@ -204,7 +204,7 @@ function Index() {
                     className="tile group flex flex-col justify-between rounded-2xl p-3 transition-all hover:border-border hover:shadow-md"
                   >
                     <div>
-                      <div className="relative mb-3 h-36 w-full overflow-hidden rounded-xl bg-border">
+                      <div className="relative mb-3 aspect-[4/3] w-full overflow-hidden rounded-xl bg-secondary">
                         {p.cover_url && (
                           <img
                             src={p.cover_url}

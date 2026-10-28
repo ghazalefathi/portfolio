@@ -38,7 +38,7 @@ type Editable = Omit<Project, "id" | "created_at" | "updated_at" | "sort_order">
 const BLANK: Editable = {
   title_fa: "", title_en: "", desc_fa: "", desc_en: "", features_fa: "", features_en: "",
   implementation_fa: "", implementation_en: "", tag_fa: "", tag_en: "", tech: "Flutter & Dart",
-  category: "mobile", link_url: "", cover_url: "", published: true,
+  category: "mobile", link_url: "", release_url: "", cover_url: "", published: true,
 };
 
 function ProjectEditorPage() {
@@ -188,12 +188,20 @@ function ProjectForm({
           </label>
         </div>
         <TextField
-          label="لینک پروژه (گیت‌هاب، فیگما یا دمو)"
+          label="لینک فیگما (Figma Link)"
           value={form.link_url}
           onChange={set("link_url")}
           ltr
           type="url"
-          placeholder="https://"
+          placeholder="https://figma.com/..."
+        />
+        <TextField
+          label="لینک انتشار اپ (اختیاری - پلی‌استور، بازار و...)"
+          value={(form as any).release_url || ""}
+          onChange={set("release_url" as any)}
+          ltr
+          type="url"
+          placeholder="https://play.google.com/..."
         />
         <div className="flex items-center justify-between rounded-2xl border border-border bg-card p-3">
           <div>

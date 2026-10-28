@@ -6,7 +6,6 @@ import { ArrowLeft, ExternalLink } from "lucide-react";
 import { projectDetailQuery } from "@/lib/portfolio-queries";
 import { useLang } from "@/lib/i18n";
 import { categoryLabel } from "@/lib/categories";
-import { LangToggle } from "@/components/site/LangToggle";
 import { cn } from "@/lib/utils";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -61,10 +60,10 @@ function ProjectDetail() {
   const { id } = Route.useParams();
   const { data } = useSuspenseQuery(projectDetailQuery(id));
   const { t, isFa } = useLang();
-  const p = data.project!;
+  const p = data.project! as any;
   const gallery = data.images.filter((i) => i.kind === "gallery");
   const extra = data.images.filter((i) => i.kind === "extra");
-  const slides = gallery.length > 0 ? gallery : p.cover_url ? [{ id: "cover", url: p.cover_url, caption_fa: "", caption_en: "" }] : [];
+  const slides = gallery;
   const [active, setActive] = useState(0);
   const current = slides[Math.min(active, Math.max(slides.length - 1, 0))];
   const cat = categoryLabel(p.category);
@@ -87,7 +86,6 @@ function ProjectDetail() {
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <LangToggle variant="soft" />
             <Link
               to="/"
               hash="works"
@@ -99,7 +97,7 @@ function ProjectDetail() {
           </div>
         </header>
 
-        <main className="panel space-y-8 p-6 md:p-12">
+        <main className="panel space-y-8 p-6 md:p-12 text-left" dir="ltr">
           <div className="space-y-4 border-b border-secondary pb-6">
             <div className="flex flex-wrap items-center gap-2">
               {t(p.tag_fa, p.tag_en) && (
@@ -136,14 +134,27 @@ function ProjectDetail() {
               <span dir="ltr">{p.tech || "Flutter"}</span>
             </InfoTile>
             {p.link_url && (
-              <InfoTile icon="🔗" iconClass="bg-success-soft" label={isFa ? "لینک پروژه / گیت‌هاب" : "Source / Demo Link"}>
+              <InfoTile icon="🔗" iconClass="bg-success-soft" label={isFa ? "لینک فیگما" : "Figma Link"}>
                 <a
                   href={p.link_url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-info hover:underline"
                 >
-                  {isFa ? "مشاهده لینک" : "View Source"}
+                  {isFa ? "مشاهده لینک فیگما" : "View Figma"}
+                  <ExternalLink className="h-3 w-3" />
+                </a>
+              </InfoTile>
+            )}
+            {p.release_url && (
+              <InfoTile icon="🚀" iconClass="bg-info-soft" label={isFa ? "لینک انتشار اپ" : "App Release Link"}>
+                <a
+                  href={p.release_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-info hover:underline"
+                >
+                  {isFa ? "مشاهده اپ منتشرشده" : "View Live App"}
                   <ExternalLink className="h-3 w-3" />
                 </a>
               </InfoTile>
@@ -175,14 +186,14 @@ function ProjectDetail() {
             </div>
           )}
 
-          {current && (
+          {gallery.length > 0 && current && (
             <div className="space-y-4 border-t border-secondary pt-4">
               <h3 className="text-base font-bold text-foreground">{isFa ? "گالری تصاویر پروژه" : "Project Gallery"}</h3>
               <div className="flex h-80 w-full items-center justify-center overflow-hidden rounded-3xl border border-border bg-secondary p-4 shadow-inner md:h-[480px] md:p-6">
                 <img
                   src={current.url}
                   alt={t(current.caption_fa, current.caption_en) || title}
-                  className="max-h-full max-w-full rounded-2xl object-contain shadow-md transition-all duration-300"
+                  className="h-full w-full rounded-2xl object-cover shadow-md transition-all duration-300"
                 />
               </div>
               {t(current.caption_fa, current.caption_en) && (
@@ -222,7 +233,7 @@ function ProjectDetail() {
                     key={img.id}
                     className="w-full max-w-4xl overflow-hidden rounded-3xl border border-border bg-secondary shadow-sm"
                   >
-                    <img src={img.url} alt={t(img.caption_fa, img.caption_en) || title} className="h-auto w-full object-contain" />
+                    <img src={img.url} alt={t(img.caption_fa, img.caption_en) || title} className="h-auto w-full object-cover" />
                     {t(img.caption_fa, img.caption_en) && (
                       <figcaption className="bg-card px-4 py-2 text-center text-xs text-muted-foreground">
                         {t(img.caption_fa, img.caption_en)}
