@@ -53,6 +53,10 @@ function Index() {
   const projects = data.projects.filter((p) => filter === "all" || p.category === filter);
   const devSkills = data.skills.filter((k) => k.group_key === "dev");
   const designSkills = data.skills.filter((k) => k.group_key === "design");
+  const aiSkills = data.skills.filter((k) => k.group_key === "ai");
+  const defaultAiSkills = aiSkills.length > 0
+    ? aiSkills.map((k) => t(k.label_fa, k.label_en))
+    : ["ChatGPT", "Claude", "Cursor", "GitHub Copilot", "Midjourney"];
   const name = t(s?.name_fa, s?.name_en);
 
   return (
@@ -246,7 +250,7 @@ function Index() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <SkillGroup
               icon={<span className="font-mono">{"</>"}</span>}
               iconClass="bg-code-muted text-code-strong"
@@ -258,6 +262,12 @@ function Index() {
               iconClass="bg-design-soft text-design"
               title={t(s?.skills_design_title_fa, s?.skills_design_title_en)}
               items={designSkills.map((k) => t(k.label_fa, k.label_en))}
+            />
+            <SkillGroup
+              icon={<span>🤖</span>}
+              iconClass="bg-success-soft text-success-strong"
+              title={isFa ? "ابزارها و هوش مصنوعی (AI)" : "AI Tools & Assistants"}
+              items={defaultAiSkills}
             />
           </div>
         </section>
@@ -297,9 +307,6 @@ function Index() {
           </div>
         </section>
 
-        <footer className="pb-4 text-center text-[11px] text-subtle">
-          © {name}
-        </footer>
       </div>
     </div>
   );
