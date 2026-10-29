@@ -33,7 +33,17 @@ export const Route = createFileRoute("/_authenticated/dashboard_/projects/$id")(
   component: ProjectEditorPage,
 });
 
-type Editable = Omit<Project, "id" | "created_at" | "updated_at" | "sort_order">;
+type Editable = Omit<
+  Project,
+  | "id"
+  | "created_at"
+  | "updated_at"
+  | "sort_order"
+  | "gallery_desc_fa"
+  | "gallery_desc_en"
+  | "extra_desc_fa"
+  | "extra_desc_en"
+>;
 
 const BLANK: Editable = {
   title_fa: "", title_en: "", desc_fa: "", desc_en: "", features_fa: "", features_en: "",
@@ -101,7 +111,17 @@ function EditProject({ id }: { id: string }) {
   const { data } = useSuspenseQuery(adminProjectQuery(id));
   const qc = useQueryClient();
   const project = data.project!;
-  const { id: _id, created_at: _c, updated_at: _u, sort_order: _s, ...initial } = project;
+  const {
+    id: _id,
+    created_at: _c,
+    updated_at: _u,
+    sort_order: _s,
+    gallery_desc_fa: _gf,
+    gallery_desc_en: _ge,
+    extra_desc_fa: _xf,
+    extra_desc_en: _xe,
+    ...initial
+  } = project;
 
   async function update(values: Editable) {
     const { error } = await supabase.from("projects").update(values).eq("id", id);
@@ -109,6 +129,17 @@ function EditProject({ id }: { id: string }) {
     qc.invalidateQueries({ queryKey: ["admin"] });
     qc.invalidateQueries({ queryKey: ["portfolio"] });
     toast.success("تغییرات پروژه ذخیره شد");
+  }
+
+  async function saveSectionCaption(kind: "gallery" | "extra", fa: string, en: string) {
+    const patch =
+      kind === "gallery"
+        ? { gallery_desc_fa: fa, gallery_desc_en: en }
+        : { extra_desc_fa: fa, extra_desc_en: en };
+    const { error } = await supabase.from("projects").update(patch).eq("id", id);
+    if (error) throw new Error(error.message);
+    qc.invalidateQueries({ queryKey: ["admin"] });
+    qc.invalidateQueries({ queryKey: ["portfolio"] });
   }
 
   return (
@@ -131,6 +162,9 @@ function EditProject({ id }: { id: string }) {
         images={data.images}
         title="🖼️ گالری تصاویر (اسلایدر)"
         description="این عکس‌ها در اسلایدر صفحه پروژه نمایش داده می‌شوند. می‌توانید چند عکس را هم‌زمان انتخاب کنید."
+        initialCaptionFa={project.gallery_desc_fa}
+        initialCaptionEn={project.gallery_desc_en}
+        onSaveCaption={(fa, en) => saveSectionCaption("gallery", fa, en)}
       />
       <ProjectImages
         projectId={id}
@@ -138,6 +172,9 @@ function EditProject({ id }: { id: string }) {
         images={data.images}
         title="📎 تصاویر تکمیلی"
         description="تصاویر بزرگ و تمام‌عرض که پایین صفحه پروژه نمایش داده می‌شوند (اختیاری)."
+        initialCaptionFa={project.extra_desc_fa}
+        initialCaptionEn={project.extra_desc_en}
+        onSaveCaption={(fa, en) => saveSectionCaption("extra", fa, en)}
       />
     </div>
   );

@@ -194,19 +194,21 @@ function ProjectDetail() {
 
           {gallery.length > 0 && current && (
             <div className="space-y-4 border-t border-secondary pt-4">
-              <h3 className="text-base font-bold text-foreground">{isFa ? "گالری تصاویر پروژه" : "Project Gallery"}</h3>
-              <div className="flex h-80 w-full items-center justify-center overflow-hidden rounded-3xl border border-border bg-secondary p-4 shadow-inner md:h-[480px] md:p-6">
+              <div className="space-y-1">
+                <h3 className="text-base font-bold text-foreground">{isFa ? "گالری تصاویر پروژه" : "Project Gallery"}</h3>
+                {t(p.gallery_desc_fa, p.gallery_desc_en) && (
+                  <p className="whitespace-pre-line text-xs leading-relaxed text-subtle-foreground">
+                    {t(p.gallery_desc_fa, p.gallery_desc_en)}
+                  </p>
+                )}
+              </div>
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-border bg-secondary shadow-inner">
                 <img
                   src={current.url}
                   alt={t(current.caption_fa, current.caption_en) || title}
-                  className="h-full w-full rounded-2xl object-cover shadow-md transition-all duration-300"
+                  className="h-full w-full object-contain"
                 />
               </div>
-              {t(current.caption_fa, current.caption_en) && (
-                <p className="text-center text-xs font-medium text-muted-foreground">
-                  {t(current.caption_fa, current.caption_en)}
-                </p>
-              )}
               {slides.length > 1 && (
                 <div className="flex items-center gap-3 overflow-x-auto pb-2">
                   {slides.map((img, i) => (
@@ -232,7 +234,14 @@ function ProjectDetail() {
 
           {extra.length > 0 && (
             <div className="space-y-4 border-t border-secondary pt-6">
-              <h3 className="text-base font-bold text-foreground">{isFa ? "تصاویر تکمیلی" : "Additional Screens"}</h3>
+              <div className="space-y-1">
+                <h3 className="text-base font-bold text-foreground">{isFa ? "تصاویر تکمیلی" : "Additional Screens"}</h3>
+                {t(p.extra_desc_fa, p.extra_desc_en) && (
+                  <p className="whitespace-pre-line text-xs leading-relaxed text-subtle-foreground">
+                    {t(p.extra_desc_fa, p.extra_desc_en)}
+                  </p>
+                )}
+              </div>
               <div className="grid grid-cols-1 justify-items-center gap-6">
                 {extra.map((img) => (
                   <figure
@@ -240,11 +249,6 @@ function ProjectDetail() {
                     className="w-full max-w-4xl overflow-hidden rounded-3xl border border-border bg-secondary shadow-sm"
                   >
                     <img src={img.url} alt={t(img.caption_fa, img.caption_en) || title} className="h-auto w-full object-cover" />
-                    {t(img.caption_fa, img.caption_en) && (
-                      <figcaption className="bg-card px-4 py-2 text-center text-xs text-muted-foreground">
-                        {t(img.caption_fa, img.caption_en)}
-                      </figcaption>
-                    )}
                   </figure>
                 ))}
               </div>

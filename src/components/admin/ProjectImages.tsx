@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowDown, ArrowUp, ImagePlus, Loader2, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, ImagePlus, Loader2, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/lib/my-supabase";
 import { swapItems, uploadImage, type ProjectImage } from "@/lib/admin-api";
 import { Button } from "@/components/ui/button";
-import { Section } from "./fields";
+import { Section, TextField } from "./fields";
 
 export function ProjectImages({
   projectId,
@@ -14,16 +14,25 @@ export function ProjectImages({
   images,
   title,
   description,
+  initialCaptionFa,
+  initialCaptionEn,
+  onSaveCaption,
 }: {
   projectId: string;
   kind: "gallery" | "extra";
   images: ProjectImage[];
   title: string;
   description: string;
+  initialCaptionFa: string;
+  initialCaptionEn: string;
+  onSaveCaption: (fa: string, en: string) => Promise<void>;
 }) {
   const qc = useQueryClient();
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(0);
+  const [captionFa, setCaptionFa] = useState(initialCaptionFa);
+  const [captionEn, setCaptionEn] = useState(initialCaptionEn);
+  const [savingCaption, setSavingCaption] = useState(false);
   const items = images.filter((i) => i.kind === kind);
 
   const refresh = () => {
@@ -56,13 +65,17 @@ export function ProjectImages({
     }
   }
 
-  async function updateCaption(img: ProjectImage, field: "caption_fa" | "caption_en", value: string) {
-    if (img[field] === value) return;
-    const patch = field === "caption_fa" ? { caption_fa: value } : { caption_en: value };
-    const { error } = await supabase.from("project_images").update(patch).eq("id", img.id);
-    if (error) { toast.error(error.message); return; }
-    toast.success("توضیح تصویر ذخیره شد");
-    refresh();
+  async function saveCaption(e: React.FormEvent) {
+    e.preventDefault();
+    setSavingCaption(true);
+    try {
+      await onSaveCaption(captionFa, captionEn);
+      toast.success("متن بخش ذخیره شد");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "ذخیره متن ناموفق بود");
+    } finally {
+      setSavingCaption(false);
+    }
   }
 
   async function move(index: number, dir: -1 | 1) {
@@ -84,6 +97,32 @@ export function ProjectImages({
 
   return (
     <Section title={title} description={description}>
+      <form onSubmit={saveCaption} className="space-y-3 rounded-2xl border border-border bg-card p-4">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <TextField
+            label="متن این بخش (فارسی)"
+            value={captionFa}
+            onChange={setCaptionFa}
+            multiline
+            rows={3}
+            placeholder="توضیح کوتاه درباره این بخش"
+          />
+          <TextField
+            label="متن این بخش (انگلیسی)"
+            value={captionEn}
+            onChange={setCaptionEn}
+            multiline
+            rows={3}
+            ltr
+            placeholder="Short description for this section"
+          />
+        </div>
+        <Button type="submit" size="pill" disabled={savingCaption}>
+          {savingCaption ? <Loader2 className="animate-spin" /> : <Save />}
+          ذخیره متن بخش
+        </Button>
+      </form>
+
       <div>
         <Button type="button" size="pill" onClick={() => inputRef.current?.click()} disabled={uploading > 0}>
           {uploading > 0 ? <Loader2 className="animate-spin" /> : <ImagePlus />}
@@ -104,24 +143,9 @@ export function ProjectImages({
       ) : (
         <ul className="space-y-3">
           {items.map((img, i) => (
-            <li key={img.id} className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-3 sm:flex-row">
+            <li key={img.id} className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-3 sm:flex-row sm:items-center">
               <img src={img.url} alt="" className="h-24 w-full shrink-0 rounded-xl bg-secondary object-cover sm:w-32" />
-              <div className="grid flex-1 grid-cols-1 gap-2 md:grid-cols-2">
-                <input
-                  defaultValue={img.caption_fa}
-                  placeholder="توضیح تصویر (فارسی)"
-                  onBlur={(e) => updateCaption(img, "caption_fa", e.target.value)}
-                  className="field"
-                />
-                <input
-                  defaultValue={img.caption_en}
-                  dir="ltr"
-                  placeholder="Caption (English)"
-                  onBlur={(e) => updateCaption(img, "caption_en", e.target.value)}
-                  className="field"
-                />
-              </div>
-              <div className="flex items-center gap-1.5 sm:flex-col">
+              <div className="flex flex-1 items-center gap-1.5 sm:justify-end">
                 <Button type="button" size="icon-pill" variant="secondary" onClick={() => move(i, -1)} disabled={i === 0} aria-label="بالاتر">
                   <ArrowUp />
                 </Button>

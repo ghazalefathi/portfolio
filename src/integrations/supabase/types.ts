@@ -62,13 +62,18 @@ export type Database = {
           created_at: string
           desc_en: string
           desc_fa: string
+          extra_desc_en: string
+          extra_desc_fa: string
           features_en: string
           features_fa: string
+          gallery_desc_en: string
+          gallery_desc_fa: string
           id: string
           implementation_en: string
           implementation_fa: string
           link_url: string
           published: boolean
+          release_url: string
           sort_order: number
           tag_en: string
           tag_fa: string
@@ -84,13 +89,18 @@ export type Database = {
           created_at?: string
           desc_en?: string
           desc_fa?: string
+          extra_desc_en?: string
+          extra_desc_fa?: string
           features_en?: string
           features_fa?: string
+          gallery_desc_en?: string
+          gallery_desc_fa?: string
           id?: string
           implementation_en?: string
           implementation_fa?: string
           link_url?: string
           published?: boolean
+          release_url?: string
           sort_order?: number
           tag_en?: string
           tag_fa?: string
@@ -106,13 +116,18 @@ export type Database = {
           created_at?: string
           desc_en?: string
           desc_fa?: string
+          extra_desc_en?: string
+          extra_desc_fa?: string
           features_en?: string
           features_fa?: string
+          gallery_desc_en?: string
+          gallery_desc_fa?: string
           id?: string
           implementation_en?: string
           implementation_fa?: string
           link_url?: string
           published?: boolean
+          release_url?: string
           sort_order?: number
           tag_en?: string
           tag_fa?: string
